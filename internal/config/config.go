@@ -1,5 +1,7 @@
 package config
 
+import "github.com/ilyakaznacheev/cleanenv"
+
 type Config struct {
 	Server     `yaml:"server"`
 	PostgresDB `yaml:"postgres-db"`
@@ -16,4 +18,13 @@ type PostgresDB struct {
 	URI           string `yaml:"db_uri" env:"DB_URI"`
 	MaxOpenConns  int    `yaml:"max_open_conns" env-default:"15"`
 	MigrationsDir string `yaml:"migrations_dir" env:"MIGRATIONS_DIR"`
+}
+
+func New(path string) (*Config, error) {
+	var cfg Config
+	if err := cleanenv.ReadConfig(path, &cfg); err != nil {
+		return nil, err
+	}
+
+	return &cfg, nil
 }
