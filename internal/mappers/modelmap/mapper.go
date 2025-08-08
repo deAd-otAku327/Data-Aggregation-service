@@ -41,7 +41,7 @@ func MapToSubscriptionPatch(request *dto.UpdateSubscriptionRequest) *models.Subs
 	}
 }
 
-func MapToSubscriptionFilterParams(request *dto.GetSubscriptionListRequest) *models.SubscriptionFilterParams {
+func MapToSubscriptionFilterParams(request *dto.ListSubscriptionsRequest) *models.SubscriptionFilterParams {
 	var userID *uuid.UUID
 	if request.UserID != nil {
 		parsed, _ := uuid.Parse(*request.UserID)

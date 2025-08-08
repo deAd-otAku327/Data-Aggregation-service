@@ -22,7 +22,7 @@ type DeleteSubscriptionRequest struct {
 	SubID string `json:"sub_id" validate:"required,uuid4"`
 }
 
-type GetSubscriptionListRequest struct {
+type ListSubscriptionsRequest struct {
 	UserID      *string `schema:"user_id" validate:"omitempty,uuid4"`
 	ServiceName *string `schema:"service"`
 }
