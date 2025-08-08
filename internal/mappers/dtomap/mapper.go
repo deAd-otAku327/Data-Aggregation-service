@@ -3,7 +3,15 @@ package dtomap
 import (
 	"data-aggregation-service/internal/types/dto"
 	"data-aggregation-service/internal/types/models"
+
+	"github.com/google/uuid"
 )
+
+func MapToSubscriptionIDResponse(subID uuid.UUID) *dto.SubscriptionIDResponse {
+	return &dto.SubscriptionIDResponse{
+		SubID: subID.String(),
+	}
+}
 
 func MapToSubscriptionResponse(model *models.Subscription) *dto.SubscriptionResponse {
 	return &dto.SubscriptionResponse{

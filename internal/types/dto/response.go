@@ -1,7 +1,11 @@
 package dto
 
+type SubscriptionIDResponse struct {
+	SubID string `json:"sub_id"`
+}
+
 type SubscriptionResponse struct {
-	ID          string  `json:"id"`
+	ID          string  `json:"sub_id"`
 	ServiceName string  `json:"service_name"`
 	Price       int     `json:"price"`
 	UserID      string  `json:"user_id"`

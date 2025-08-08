@@ -41,13 +41,13 @@ func MapToSubscriptionPatch(request *dto.UpdateSubscriptionRequest) *models.Subs
 	}
 }
 
-func MapToSubscriptionFilterParams(request *dto.ListSubscriptionsRequest) *models.SubscriptionFilterParams {
+func MapToSubscriptionFilterParams(request *dto.ListSubscriptionsRequest) *models.SubscriptionFilters {
 	var userID *uuid.UUID
 	if request.UserID != nil {
 		parsed, _ := uuid.Parse(*request.UserID)
 		userID = &parsed
 	}
-	return &models.SubscriptionFilterParams{
+	return &models.SubscriptionFilters{
 		UserID:  userID,
 		Service: request.ServiceName,
 	}

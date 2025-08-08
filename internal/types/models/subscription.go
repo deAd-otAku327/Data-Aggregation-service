@@ -21,7 +21,7 @@ type SubscriptionPatch struct {
 	EndDate *time.Time
 }
 
-type SubscriptionFilterParams struct {
+type SubscriptionFilters struct {
 	UserID  *uuid.UUID
 	Service *string
 }
