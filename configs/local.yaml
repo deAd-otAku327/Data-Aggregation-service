@@ -1,0 +1,10 @@
+server:
+  host: 0.0.0.0
+  port: 8080
+  log_level: info
+
+postgres-db: 
+  driver: postgres
+  db_uri: postgres://postgres:qwerty123@db:5432/subscriptons-db?sslmode=disable
+  max_open_conns: 15
+  migrations_dir: file://../postgres/migrations
