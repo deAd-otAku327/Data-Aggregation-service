@@ -23,5 +23,7 @@ func MustApplyMigrations(db *sql.DB, migrationsDir string) {
 		panic(err)
 	}
 
+	migrator.Close()
+
 	slog.Info("database migrated and ready")
 }
