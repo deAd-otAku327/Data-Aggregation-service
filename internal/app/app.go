@@ -4,6 +4,8 @@ import (
 	"context"
 	"data-aggregation-service/internal/config"
 	"data-aggregation-service/internal/repository"
+	"data-aggregation-service/internal/service"
+	"data-aggregation-service/internal/transport/rest/controller"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -14,12 +16,14 @@ type App struct {
 }
 
 func New(cfg *config.Config) (*App, error) {
-	_ = repository.New(&cfg.PostgresDB)
+	repo := repository.New(cfg.PostgresDB)
+	service := service.New(repo.Postgres)
+	controller := controller.New(service)
 
 	return &App{
 		Server: &http.Server{
 			Addr:    fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port),
-			Handler: nil,
+			Handler: initRouting(controller),
 		},
 	}, nil
 }

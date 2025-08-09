@@ -3,52 +3,61 @@ package modelmap
 import (
 	"data-aggregation-service/internal/types/dto"
 	"data-aggregation-service/internal/types/models"
+	"log/slog"
 	"time"
 
 	"github.com/google/uuid"
 )
 
-// DTO validation exepts parse errors.
+// DTO validation must exepts parse errors.
+
+const inputTimeFormat = "01-2006"
+
+func mustParseTime(val *string) *time.Time {
+	if val == nil {
+		return nil
+	}
+	date, err := time.Parse(inputTimeFormat, *val)
+	if err != nil {
+		slog.Error("validation and mapping contract violated")
+		panic(err)
+	}
+	return &date
+}
+
+func mustParseUUID(val *string) *uuid.UUID {
+	if val == nil {
+		return nil
+	}
+	uuid, err := uuid.Parse(*val)
+	if err != nil {
+		slog.Error("validation and mapping contract violated")
+		panic(err)
+	}
+	return &uuid
+}
 
 func MapToSubscription(request *dto.CreateSubscriptionRequest) *models.Subscription {
-	userID, _ := uuid.Parse(request.UserID)
-	stDate, _ := time.Parse("01-2006", request.StartDate)
-	var endDate *time.Time
-	if request.EndDate != nil {
-		parsed, _ := time.Parse("01-2006", *request.EndDate)
-		endDate = &parsed
-	}
 	return &models.Subscription{
 		ServiceName: request.ServiceName,
 		Price:       request.Price,
-		UserID:      userID,
-		StartDate:   stDate,
-		EndDate:     endDate,
+		UserID:      *mustParseUUID(&request.UserID),
+		StartDate:   *mustParseTime(&request.StartDate),
+		EndDate:     mustParseTime(request.EndDate),
 	}
 }
 
 func MapToSubscriptionPatch(request *dto.UpdateSubscriptionRequest) *models.SubscriptionPatch {
-	subID, _ := uuid.Parse(request.SubID)
-	var endDate *time.Time
-	if request.EndDate != nil {
-		parsed, _ := time.Parse("01-2006", *request.EndDate)
-		endDate = &parsed
-	}
 	return &models.SubscriptionPatch{
-		SubID:   subID,
+		SubID:   *mustParseUUID(&request.SubID),
 		Price:   request.Price,
-		EndDate: endDate,
+		EndDate: mustParseTime(request.EndDate),
 	}
 }
 
 func MapToSubscriptionFilterParams(request *dto.ListSubscriptionsRequest) *models.SubscriptionFilters {
-	var userID *uuid.UUID
-	if request.UserID != nil {
-		parsed, _ := uuid.Parse(*request.UserID)
-		userID = &parsed
-	}
 	return &models.SubscriptionFilters{
-		UserID:  userID,
+		UserID:  mustParseUUID(request.UserID),
 		Service: request.ServiceName,
 	}
 }

@@ -9,17 +9,17 @@ type CreateSubscriptionRequest struct {
 }
 
 type GetSubscriptionRequest struct {
-	SubID string `schema:"sub_id" validate:"required,uuid4"`
+	SubID string `validate:"required,uuid4"` // FROM PATH.
 }
 
 type UpdateSubscriptionRequest struct {
-	SubID   string  `json:"sub_id" validate:"required,uuid4"`
+	SubID   string  `validate:"required,uuid4"` // FROM PATH.
 	Price   *int    `json:"price" validate:"omitempty,gte=0"`
 	EndDate *string `json:"end_date" validate:"omitempty,datetime=01-2006"`
 }
 
 type DeleteSubscriptionRequest struct {
-	SubID string `json:"sub_id" validate:"required,uuid4"`
+	SubID string `validate:"required,uuid4"` // FROM PATH.
 }
 
 type ListSubscriptionsRequest struct {

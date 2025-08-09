@@ -7,6 +7,8 @@ import (
 	"github.com/google/uuid"
 )
 
+const outputTimeFormat = "01-2006"
+
 func MapToSubscriptionIDResponse(subID uuid.UUID) *dto.SubscriptionIDResponse {
 	return &dto.SubscriptionIDResponse{
 		SubID: subID.String(),
@@ -18,11 +20,11 @@ func MapToSubscriptionResponse(model *models.Subscription) *dto.SubscriptionResp
 		ID:          model.ID.String(),
 		ServiceName: model.ServiceName,
 		Price:       model.Price,
-		StartDate:   model.StartDate.Format("01-2006"),
+		StartDate:   model.StartDate.Format(outputTimeFormat),
 		UserID:      model.UserID.String(),
 		EndDate: func() *string {
 			if model.EndDate != nil {
-				strDate := model.EndDate.Format("01-2006")
+				strDate := model.EndDate.Format(outputTimeFormat)
 				return &strDate
 			}
 			return nil
