@@ -20,9 +20,10 @@ type controller struct {
 	logger  *slog.Logger
 }
 
-func New(s service.Service) Controller {
+func New(s service.Service, l *slog.Logger) Controller {
 	return &controller{
 		service: s,
+		logger:  l,
 	}
 }
 

@@ -6,9 +6,11 @@ import (
 	"data-aggregation-service/internal/repository"
 	"data-aggregation-service/internal/service"
 	"data-aggregation-service/internal/transport/rest/controller"
+	"data-aggregation-service/pkg/logger"
 	"fmt"
 	"log/slog"
 	"net/http"
+	"os"
 )
 
 type App struct {
@@ -16,14 +18,19 @@ type App struct {
 }
 
 func New(cfg *config.Config) (*App, error) {
+	logger, err := logger.NewTextLogger(os.Stdout, cfg.LogLevel)
+	if err != nil {
+		return nil, err
+	}
+
 	repo := repository.New(cfg.PostgresDB)
 	service := service.New(repo.Postgres)
-	controller := controller.New(service)
+	controller := controller.New(service, logger)
 
 	return &App{
 		Server: &http.Server{
 			Addr:    fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port),
-			Handler: initRouting(controller),
+			Handler: initRouting(controller, logger),
 		},
 	}, nil
 }
