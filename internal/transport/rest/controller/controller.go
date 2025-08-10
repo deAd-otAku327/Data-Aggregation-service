@@ -113,7 +113,7 @@ func (c *controller) HandleUpdateSubscription() http.HandlerFunc {
 			return
 		}
 
-		responser.MakeResponseJSON(w, http.StatusOK, nil)
+		responser.MakeResponseJSON(w, http.StatusNoContent, nil)
 	}
 }
 
@@ -135,7 +135,7 @@ func (c *controller) HandleDeleteSubscription() http.HandlerFunc {
 			return
 		}
 
-		responser.MakeResponseJSON(w, http.StatusOK, nil)
+		responser.MakeResponseJSON(w, http.StatusNoContent, nil)
 	}
 }
 
