@@ -14,7 +14,7 @@ func initRouting(controller controller.Controller, logger *slog.Logger) *mux.Rou
 	router.Use(middleware.Logging(logger))
 
 	router.HandleFunc("/subscriptions", controller.HandleCreateSubscription()).Methods(http.MethodPost)
-	router.HandleFunc("/subscriptions/{subId}", controller.HandleCreateSubscription()).Methods(http.MethodGet)
+	router.HandleFunc("/subscriptions/{subId}", controller.HandleGetSubscription()).Methods(http.MethodGet)
 
 	router.HandleFunc("/subscriptions/{subId}", controller.HandleUpdateSubscription()).Methods(http.MethodPatch)
 	router.HandleFunc("/subscriptions/{subId}", controller.HandleDeleteSubscription()).Methods(http.MethodDelete)
