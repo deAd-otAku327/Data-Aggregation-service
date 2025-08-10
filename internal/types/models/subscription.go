@@ -15,6 +15,10 @@ type Subscription struct {
 	EndDate     *time.Time
 }
 
+type SubscriptionID struct {
+	SubID uuid.UUID
+}
+
 type SubscriptionPatch struct {
 	SubID   uuid.UUID
 	Price   *int
@@ -24,4 +28,10 @@ type SubscriptionPatch struct {
 type SubscriptionFilters struct {
 	UserID  *uuid.UUID
 	Service *string
+}
+
+type TotalCostFilters struct {
+	FromDate   time.Time
+	ToDate     time.Time
+	SubFilters SubscriptionFilters
 }

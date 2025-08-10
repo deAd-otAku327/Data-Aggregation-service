@@ -3,15 +3,13 @@ package dtomap
 import (
 	"data-aggregation-service/internal/types/dto"
 	"data-aggregation-service/internal/types/models"
-
-	"github.com/google/uuid"
 )
 
 const outputTimeFormat = "01-2006"
 
-func MapToSubscriptionIDResponse(subID uuid.UUID) *dto.SubscriptionIDResponse {
+func MapToSubscriptionIDResponse(model *models.SubscriptionID) *dto.SubscriptionIDResponse {
 	return &dto.SubscriptionIDResponse{
-		SubID: subID.String(),
+		SubID: model.SubID.String(),
 	}
 }
 
@@ -43,12 +41,5 @@ func MapToSubscriptionListResponse(models []*models.Subscription) *dto.Subscript
 func MapToTotalCostResponse(totalCost int) *dto.TotalCostResponse {
 	return &dto.TotalCostResponse{
 		TotalCost: totalCost,
-	}
-}
-
-func MapToErrorResponse(err error, code int) *dto.ErrorResponse {
-	return &dto.ErrorResponse{
-		Message: err.Error(),
-		Code:    code,
 	}
 }

@@ -47,6 +47,18 @@ func MapToSubscription(request *dto.CreateSubscriptionRequest) *models.Subscript
 	}
 }
 
+func MapGetSubscriptionToSubscriptionID(request *dto.GetSubscriptionRequest) *models.SubscriptionID {
+	return &models.SubscriptionID{
+		SubID: *mustParseUUID(&request.SubID),
+	}
+}
+
+func MapDeleteSubscriptionToSubscriptionID(request *dto.DeleteSubscriptionRequest) *models.SubscriptionID {
+	return &models.SubscriptionID{
+		SubID: *mustParseUUID(&request.SubID),
+	}
+}
+
 func MapToSubscriptionPatch(request *dto.UpdateSubscriptionRequest) *models.SubscriptionPatch {
 	return &models.SubscriptionPatch{
 		SubID:   *mustParseUUID(&request.SubID),
@@ -59,5 +71,16 @@ func MapToSubscriptionFilterParams(request *dto.ListSubscriptionsRequest) *model
 	return &models.SubscriptionFilters{
 		UserID:  mustParseUUID(request.UserID),
 		Service: request.ServiceName,
+	}
+}
+
+func MapToTotalCostFilters(request *dto.GetTotalCostRequest) *models.TotalCostFilters {
+	return &models.TotalCostFilters{
+		FromDate: *mustParseTime(&request.FromDate),
+		ToDate:   *mustParseTime(&request.ToDate),
+		SubFilters: models.SubscriptionFilters{
+			UserID:  mustParseUUID(request.UserID),
+			Service: request.ServiceName,
+		},
 	}
 }

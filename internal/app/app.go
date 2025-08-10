@@ -11,6 +11,8 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type App struct {
@@ -25,7 +27,7 @@ func New(cfg *config.Config) (*App, error) {
 
 	repo := repository.New(cfg.PostgresDB)
 	service := service.New(repo.Postgres)
-	controller := controller.New(service, logger)
+	controller := controller.New(service, validator.New(), logger)
 
 	return &App{
 		Server: &http.Server{

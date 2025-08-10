@@ -7,7 +7,6 @@ import (
 	"data-aggregation-service/pkg/db"
 	"data-aggregation-service/pkg/migrator"
 	"database/sql"
-	"time"
 
 	"github.com/google/uuid"
 )
@@ -29,7 +28,7 @@ func (r *postgresRepo) CreateSubscription(ctx context.Context, sub *models.Subsc
 	return nil, nil
 }
 
-func (r *postgresRepo) GetSubscription(ctx context.Context, subID uuid.UUID) (*models.Subscription, error) {
+func (r *postgresRepo) GetSubscription(ctx context.Context, subID *models.SubscriptionID) (*models.Subscription, error) {
 	return nil, nil
 }
 
@@ -37,7 +36,7 @@ func (r *postgresRepo) UpdateSubscription(ctx context.Context, patch *models.Sub
 	return nil
 }
 
-func (r *postgresRepo) DeleteSubsription(ctx context.Context, subID uuid.UUID) error {
+func (r *postgresRepo) DeleteSubsription(ctx context.Context, subID *models.SubscriptionID) error {
 	return nil
 }
 
@@ -45,6 +44,6 @@ func (r *postgresRepo) ListSubscriptions(ctx context.Context, filters *models.Su
 	return nil, nil
 }
 
-func (r *postgresRepo) GetTotalCost(ctx context.Context, periodStart, periodEnd time.Time, filters *models.SubscriptionFilters) (*int, error) {
+func (r *postgresRepo) GetTotalCost(ctx context.Context, filters *models.TotalCostFilters) (*int, error) {
 	return nil, nil
 }
