@@ -11,13 +11,11 @@ import (
 
 // DTO validation must exepts parse errors.
 
-const inputTimeFormat = "01-2006"
-
 func mustParseTime(val *string) *time.Time {
 	if val == nil {
 		return nil
 	}
-	date, err := time.Parse(inputTimeFormat, *val)
+	date, err := time.Parse(dto.DateTimeLayout, *val)
 	if err != nil {
 		slog.Error("validation and mapping contract violated")
 		panic(err)

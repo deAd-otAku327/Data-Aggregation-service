@@ -1,11 +1,13 @@
 package dto
 
+const DateTimeLayout = "01-2006"
+
 type CreateSubscriptionRequest struct {
-	ServiceName string  `json:"service_name"`
-	Price       int     `json:"price" validate:"required,gte=0"`
+	ServiceName string  `json:"service_name" validate:"required"`
+	Price       int     `json:"price" validate:"omitempty,gte=0"` // Omitempty skips zero values.
 	UserID      string  `json:"user_id" validate:"required,uuid4"`
 	StartDate   string  `json:"start_date" validate:"required,datetime=01-2006"`
-	EndDate     *string `json:"end_date" validate:"omitempty,datetime=01-2006"`
+	EndDate     *string `json:"end_date" validate:"omitempty,datetime=01-2006,afterdate=StartDate"`
 }
 
 type GetSubscriptionRequest struct {

@@ -6,13 +6,12 @@ import (
 	"data-aggregation-service/internal/repository"
 	"data-aggregation-service/internal/service"
 	"data-aggregation-service/internal/transport/rest/controller"
+	"data-aggregation-service/internal/validation"
 	"data-aggregation-service/pkg/logger"
 	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
-
-	"github.com/go-playground/validator/v10"
 )
 
 type App struct {
@@ -27,7 +26,7 @@ func New(cfg *config.Config) (*App, error) {
 
 	repo := repository.New(cfg.PostgresDB)
 	service := service.New(repo.Postgres)
-	controller := controller.New(service, validator.New(), logger)
+	controller := controller.New(service, validation.New(), logger)
 
 	return &App{
 		Server: &http.Server{

@@ -5,8 +5,6 @@ import (
 	"data-aggregation-service/internal/types/models"
 )
 
-const outputTimeFormat = "01-2006"
-
 func MapToSubscriptionIDResponse(model *models.SubscriptionID) *dto.SubscriptionIDResponse {
 	return &dto.SubscriptionIDResponse{
 		SubID: model.SubID.String(),
@@ -18,11 +16,11 @@ func MapToSubscriptionResponse(model *models.Subscription) *dto.SubscriptionResp
 		ID:          model.ID.String(),
 		ServiceName: model.ServiceName,
 		Price:       model.Price,
-		StartDate:   model.StartDate.Format(outputTimeFormat),
+		StartDate:   model.StartDate.Format(dto.DateTimeLayout),
 		UserID:      model.UserID.String(),
 		EndDate: func() *string {
 			if model.EndDate != nil {
-				strDate := model.EndDate.Format(outputTimeFormat)
+				strDate := model.EndDate.Format(dto.DateTimeLayout)
 				return &strDate
 			}
 			return nil
@@ -41,5 +39,12 @@ func MapToSubscriptionListResponse(models []*models.Subscription) *dto.Subscript
 func MapToTotalCostResponse(totalCost int) *dto.TotalCostResponse {
 	return &dto.TotalCostResponse{
 		TotalCost: totalCost,
+	}
+}
+
+func MapToErrorResponse(msgs []string, statusCode int) *dto.ErrorResponse {
+	return &dto.ErrorResponse{
+		Code:     statusCode,
+		Messages: msgs,
 	}
 }

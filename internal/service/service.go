@@ -5,6 +5,7 @@ import (
 	"data-aggregation-service/internal/repository"
 	"data-aggregation-service/internal/types/dto"
 	"data-aggregation-service/internal/types/models"
+	"fmt"
 )
 
 type Service interface {
@@ -27,6 +28,7 @@ func New(r repository.Repository) Service {
 }
 
 func (s *service) CreateSubscription(ctx context.Context, sub *models.Subscription) (*dto.SubscriptionIDResponse, error) {
+	fmt.Println(sub)
 	return nil, nil
 }
 

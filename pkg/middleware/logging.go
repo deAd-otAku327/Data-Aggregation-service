@@ -37,7 +37,7 @@ func Logging(log *slog.Logger) mux.MiddlewareFunc {
 			w.Header().Set("X-Request-ID", rid)
 
 			log.Info(
-				"Request: ",
+				"Request:",
 				slog.String("request_id", rid),
 				slog.String("method", r.Method),
 				slog.String("url", r.URL.Path),
