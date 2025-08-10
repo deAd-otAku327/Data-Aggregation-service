@@ -23,5 +23,5 @@ type TotalCostResponse struct {
 
 type ErrorResponse struct {
 	Code     int      `json:"code"`
-	Messages []string `json:"message"`
+	Messages []string `json:"messages"`
 }
