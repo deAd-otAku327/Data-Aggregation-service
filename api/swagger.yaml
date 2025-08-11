@@ -1,0 +1,238 @@
+openapi: '3.0.0'
+info:
+  title: Data-Aggregation-service API
+  version: '1.0'
+servers:
+  - url: http://localhost:8080
+
+components:
+  schemas:
+    Subscription: 
+      type: object
+      properties:
+        sub_id:
+          type: string
+          format: uuid
+        service_name:
+          type: string
+        price:
+          type: integer
+        user_id:
+          type: string
+          format: uuid
+        start_date:
+          type: string
+          format: datetime
+        end_date:
+          type: string
+          format: datetime
+      required: [sub_id, service_name, price, user_id, start_date]
+    
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: http-код ошибки
+        messages:
+          type: array
+          items:
+            type: string
+      required: [code, messages]
+
+paths:
+  /api/subscriptions:
+    post:
+      summary: Создание подписки
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                service_name:
+                  type: string
+                  example: Yandex Plus
+                price:
+                  type: integer
+                  example: 200
+                user_id:
+                  type: string
+                  format: uuid
+                  example: eb8a32db-139f-4e33-b172-39810efcc487
+                start_date:
+                  type: string
+                  format: datetime
+                  example: 08-2025
+                end_date:
+                  type: string
+                  format: datetime
+                  example: 09-2025
+              required: [service_name, price, user_id, start_date]
+      responses:
+        '201':
+          description: Подписка успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '400':
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    get:
+      summary: Получение списка подписок с фильтрацией по uuid пользователя и сервису (хотя бы 1 фильтр обязателен)
+      parameters:
+        - name: user_id
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: eb8a32db-139f-4e33-b172-39810efcc487
+        - name: service_name
+          in: query
+          required: false
+          schema:
+            type: string
+            example: Yandex Plus
+      responses:
+        '200':
+          description: Список подписок выдан
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+        '400':
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /api/subscriptions/{subId}:
+    get:
+      summary: Получение подписки с предоставленным subId
+      parameters:
+        - name: subId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Подписка выдана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '400':
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    patch:
+      summary: Частичное обновление подписки (цена и/или дата окончания обязательна) с предоставленным subId
+      parameters:
+        - name: subId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                price:
+                  type: integer
+                  example: 300
+                end_date:
+                  type: string
+                  format: datetime
+                  example: 04-2025
+      responses:
+        '204':
+          description: Подписка обновлена
+        '400':
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+
+    delete:
+      summary: Удаление подписки с предоставленным subId
+      parameters:
+        - name: subId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Подписка удалена
+        '400':
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' 
+
+  /api/subscriptions/total-cost:
+    get:
+      summary: Получение суммарной стоимости подписок за период с фильтрацией по uuid пользователя и сервису (хотя бы 1 фильтр обязателен)
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            type: string
+            format: datetime
+            example: 01-2025
+        - name: to
+          in: query
+          required: true
+          schema:
+            type: string
+            format: datetime
+            example: 12-2025
+        - name: user_id
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: eb8a32db-139f-4e33-b172-39810efcc487
+        - name: service_name
+          in: query
+          required: false
+          schema:
+            type: string
+            example: Yandex Plus
+      responses:
+        '200':
+          description: Суммарная стоимость выдана
+          content:
+            application/json:
+              schema:
+                type: integer
+        '400':
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'       
