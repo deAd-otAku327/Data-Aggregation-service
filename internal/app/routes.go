@@ -20,7 +20,7 @@ func initRouting(controller controller.Controller, logger *slog.Logger) *mux.Rou
 	router.HandleFunc("/subscriptions/{subId}", controller.HandleDeleteSubscription()).Methods(http.MethodDelete)
 
 	router.HandleFunc("/subscriptions", controller.HandleListSubscriptions()).Methods(http.MethodGet)
-	router.HandleFunc("/total-cost", controller.HandleGetTotalCost()).Methods(http.MethodGet)
+	router.HandleFunc("/subscriptions/total-cost", controller.HandleGetTotalCost()).Methods(http.MethodGet)
 
 	return router
 }

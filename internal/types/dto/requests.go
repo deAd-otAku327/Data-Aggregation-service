@@ -26,12 +26,12 @@ type DeleteSubscriptionRequest struct {
 
 type ListSubscriptionsRequest struct {
 	UserID      *string `schema:"user_id" validate:"required_without=ServiceName,uuid4"`
-	ServiceName *string `schema:"service" validate:"required_without=UserID"`
+	ServiceName *string `schema:"service_name" validate:"required_without=UserID"`
 }
 
 type GetTotalCostRequest struct {
 	FromDate    string  `schema:"from" validate:"required,datetime=01-2006"`
 	ToDate      string  `schema:"to" validate:"required,datetime=01-2006"`
 	UserID      *string `schema:"user_id" validate:"required_without=ServiceName,uuid4"`
-	ServiceName *string `schema:"service" validate:"required_without=UserID"`
+	ServiceName *string `schema:"service_name" validate:"required_without=UserID"`
 }
