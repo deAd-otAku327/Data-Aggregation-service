@@ -2,7 +2,7 @@ services:
   server:
     build: .
     env_file: 
-      - app-example.env
+      - app-local.env
     ports:
       - 8080:8080
     depends_on:
@@ -12,7 +12,7 @@ services:
   db:
     image: postgres:latest
     env_file: 
-      - db-example.env
+      - db-local.env
     restart: always
     ports:
       - 5432:5432
