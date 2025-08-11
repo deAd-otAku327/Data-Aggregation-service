@@ -2,6 +2,7 @@ package validation
 
 import (
 	"data-aggregation-service/internal/types/dto"
+	"fmt"
 	"time"
 
 	"github.com/go-playground/locales/en"
@@ -19,13 +20,14 @@ func New() *Validation {
 	validate := validator.New()
 
 	_ = validate.RegisterValidation("afterdate", func(fl validator.FieldLevel) bool {
-		firstDateField := fl.Param()
-		firstDateString := fl.Parent().FieldByName(firstDateField)
-		if !firstDateString.IsValid() {
+		firstDateFieldName := fl.Param()
+		firstDateFieldValue := fl.Parent().FieldByName(firstDateFieldName)
+		if !firstDateFieldValue.IsValid() {
+			fmt.Println(firstDateFieldValue)
 			return false
 		}
 
-		firstDate, err := time.Parse(dto.DateTimeLayout, firstDateField)
+		firstDate, err := time.Parse(dto.DateTimeLayout, firstDateFieldValue.String())
 		if err != nil {
 			return false
 		}
@@ -34,6 +36,8 @@ func New() *Validation {
 		if err != nil {
 			return false
 		}
+
+		fmt.Println(firstDate, secondDate)
 
 		return secondDate.After(firstDate)
 	})
