@@ -5,17 +5,15 @@ import (
 	"data-aggregation-service/internal/config"
 	"data-aggregation-service/internal/repository/postgres"
 	"data-aggregation-service/internal/types/models"
-
-	"github.com/google/uuid"
 )
 
 type Repository interface {
-	CreateSubscription(ctx context.Context, sub *models.Subscription) (*uuid.UUID, error)
+	CreateSubscription(ctx context.Context, sub *models.Subscription) (*models.SubscriptionID, error)
 	GetSubscription(ctx context.Context, subID *models.SubscriptionID) (*models.Subscription, error)
 	UpdateSubscription(ctx context.Context, patch *models.SubscriptionPatch) error
 	DeleteSubsription(ctx context.Context, subID *models.SubscriptionID) error
 	ListSubscriptions(ctx context.Context, filters *models.SubscriptionFilters) ([]*models.Subscription, error)
-	GetTotalCost(ctx context.Context, filters *models.TotalCostFilters) (*int, error)
+	GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*models.SubscriptionsTotalCost, error)
 }
 
 type Repositories struct {

@@ -30,8 +30,12 @@ type SubscriptionFilters struct {
 	Service *string
 }
 
-type TotalCostFilters struct {
+type SubscriptionsTotalCostFilters struct {
 	FromDate   time.Time
 	ToDate     time.Time
 	SubFilters SubscriptionFilters
+}
+
+type SubscriptionsTotalCost struct {
+	TotalCost int
 }

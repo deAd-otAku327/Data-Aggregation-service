@@ -21,7 +21,7 @@ type Controller interface {
 	HandleUpdateSubscription() http.HandlerFunc
 	HandleDeleteSubscription() http.HandlerFunc
 	HandleListSubscriptions() http.HandlerFunc
-	HandleGetTotalCost() http.HandlerFunc
+	HandleGetSubscriptionsTotalCost() http.HandlerFunc
 }
 
 const URLParamSubID = "id"
@@ -171,7 +171,7 @@ func (c *controller) HandleListSubscriptions() http.HandlerFunc {
 	}
 }
 
-func (c *controller) HandleGetTotalCost() http.HandlerFunc {
+func (c *controller) HandleGetSubscriptionsTotalCost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		if err != nil {
@@ -193,7 +193,7 @@ func (c *controller) HandleGetTotalCost() http.HandlerFunc {
 			return
 		}
 
-		response, err := c.service.GetTotalCost(r.Context(), modelmap.MapToTotalCostFilters(&request))
+		response, err := c.service.GetSubscriptionsTotalCost(r.Context(), modelmap.MapToSubscriptionsTotalCostFilters(&request))
 		if err != nil {
 
 			return

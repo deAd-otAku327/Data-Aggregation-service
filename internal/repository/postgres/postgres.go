@@ -7,8 +7,6 @@ import (
 	"data-aggregation-service/pkg/db"
 	"data-aggregation-service/pkg/migrator"
 	"database/sql"
-
-	"github.com/google/uuid"
 )
 
 type postgresRepo struct {
@@ -24,7 +22,8 @@ func New(cfg config.PostgresDB) *postgresRepo {
 	}
 }
 
-func (r *postgresRepo) CreateSubscription(ctx context.Context, sub *models.Subscription) (*uuid.UUID, error) {
+func (r *postgresRepo) CreateSubscription(ctx context.Context, sub *models.Subscription) (*models.SubscriptionID, error) {
+
 	return nil, nil
 }
 
@@ -44,6 +43,6 @@ func (r *postgresRepo) ListSubscriptions(ctx context.Context, filters *models.Su
 	return nil, nil
 }
 
-func (r *postgresRepo) GetTotalCost(ctx context.Context, filters *models.TotalCostFilters) (*int, error) {
+func (r *postgresRepo) GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*models.SubscriptionsTotalCost, error) {
 	return nil, nil
 }

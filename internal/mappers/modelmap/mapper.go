@@ -72,8 +72,8 @@ func MapToSubscriptionFilterParams(request *dto.ListSubscriptionsRequest) *model
 	}
 }
 
-func MapToTotalCostFilters(request *dto.GetTotalCostRequest) *models.TotalCostFilters {
-	return &models.TotalCostFilters{
+func MapToSubscriptionsTotalCostFilters(request *dto.GetTotalCostRequest) *models.SubscriptionsTotalCostFilters {
+	return &models.SubscriptionsTotalCostFilters{
 		FromDate: *mustParseTime(&request.FromDate),
 		ToDate:   *mustParseTime(&request.ToDate),
 		SubFilters: models.SubscriptionFilters{

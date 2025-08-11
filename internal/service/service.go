@@ -5,7 +5,6 @@ import (
 	"data-aggregation-service/internal/repository"
 	"data-aggregation-service/internal/types/dto"
 	"data-aggregation-service/internal/types/models"
-	"fmt"
 )
 
 type Service interface {
@@ -14,7 +13,7 @@ type Service interface {
 	UpdateSubscription(ctx context.Context, patch *models.SubscriptionPatch) error
 	DeleteSubsription(ctx context.Context, subID *models.SubscriptionID) error
 	ListSubscriptions(ctx context.Context, filters *models.SubscriptionFilters) (*dto.SubscriptionListResponse, error)
-	GetTotalCost(ctx context.Context, filters *models.TotalCostFilters) (*dto.TotalCostResponse, error)
+	GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*dto.TotalCostResponse, error)
 }
 
 type service struct {
@@ -28,7 +27,6 @@ func New(r repository.Repository) Service {
 }
 
 func (s *service) CreateSubscription(ctx context.Context, sub *models.Subscription) (*dto.SubscriptionIDResponse, error) {
-	fmt.Println(sub)
 	return nil, nil
 }
 
@@ -48,6 +46,6 @@ func (s *service) ListSubscriptions(ctx context.Context, filters *models.Subscri
 	return nil, nil
 }
 
-func (s *service) GetTotalCost(ctx context.Context, filters *models.TotalCostFilters) (*dto.TotalCostResponse, error) {
+func (s *service) GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*dto.TotalCostResponse, error) {
 	return nil, nil
 }
