@@ -37,8 +37,6 @@ func New() *Validation {
 			return false
 		}
 
-		fmt.Println(firstDate, secondDate)
-
 		return secondDate.After(firstDate)
 	})
 
