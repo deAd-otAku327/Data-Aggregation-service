@@ -8,6 +8,7 @@ import (
 	"data-aggregation-service/internal/types/dto"
 	"data-aggregation-service/internal/validation"
 	"encoding/json"
+	"log"
 	"log/slog"
 	"net/http"
 
@@ -148,16 +149,17 @@ func (c *controller) HandleDeleteSubscription() http.HandlerFunc {
 
 func (c *controller) HandleListSubscriptions() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := r.ParseForm()
+		err := r.ParseForm() // Semicolon and other separators exclude "&"" generate errors.
 		if err != nil {
-
+			log.Println("1", r.URL.RawQuery)
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 
 		request := dto.ListSubscriptionsRequest{}
 		err = schema.NewDecoder().Decode(&request, r.Form)
 		if err != nil {
-
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 
@@ -170,7 +172,8 @@ func (c *controller) HandleListSubscriptions() http.HandlerFunc {
 
 		response, err := c.service.ListSubscriptions(r.Context(), modelmap.MapToSubscriptionFilterParams(&request))
 		if err != nil {
-
+			code, apierr := resolveError(err, c.logger)
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{apierr.Error()}, code))
 			return
 		}
 

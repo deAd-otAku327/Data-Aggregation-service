@@ -34,3 +34,15 @@ func applySubscriptionUpdateValues(query sq.UpdateBuilder, patch *models.Subscri
 
 	return query
 }
+
+func applySubscriptionsListFilters(query sq.SelectBuilder, filters *models.SubscriptionFilters) sq.SelectBuilder {
+	if filters.Service != nil {
+		query = query.Where(sq.Eq{pgconsts.SubscriptionsServiceName: filters.Service})
+	}
+
+	if filters.UserID != nil {
+		query = query.Where(sq.Eq{pgconsts.SubscriptionsUserID: filters.UserID})
+	}
+
+	return query
+}

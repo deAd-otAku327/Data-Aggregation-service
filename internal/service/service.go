@@ -68,7 +68,12 @@ func (s *service) DeleteSubsription(ctx context.Context, subscriptionID *models.
 }
 
 func (s *service) ListSubscriptions(ctx context.Context, filters *models.SubscriptionFilters) (*dto.SubscriptionListResponse, error) {
-	return nil, nil
+	subs, err := s.repo.ListSubscriptions(ctx, filters)
+	if err != nil {
+		return nil, wrapError(err)
+	}
+
+	return dtomap.MapToSubscriptionListResponse(subs), nil
 }
 
 func (s *service) GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*dto.TotalCostResponse, error) {

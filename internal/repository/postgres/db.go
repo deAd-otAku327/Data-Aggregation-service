@@ -131,7 +131,38 @@ func (r *postgresRepo) DeleteSubsription(ctx context.Context, subscriptionID *mo
 }
 
 func (r *postgresRepo) ListSubscriptions(ctx context.Context, filters *models.SubscriptionFilters) ([]*models.Subscription, error) {
-	return nil, nil
+	queryCore := sq.Select(
+		pgconsts.SubscriptionsPublicID, pgconsts.SubscriptionsServiceName, pgconsts.SubscriptionsPrice,
+		pgconsts.SubscriptionsUserID, pgconsts.SubscriptionsStartDate, pgconsts.SubscriptionsEndDate,
+	).From(pgconsts.SubscriptionsTable)
+
+	query, args, err := applySubscriptionsListFilters(queryCore, filters).
+		PlaceholderFormat(sq.Dollar).ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", pgerrors.ErrQueryBuilding, err)
+	}
+
+	rows, err := r.db.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", pgerrors.ErrQueryExec, err)
+	}
+	defer rows.Close()
+
+	subs := make([]*models.Subscription, 0)
+	for rows.Next() {
+		subscription := models.Subscription{}
+		err := rows.Scan(&subscription.ID, &subscription.ServiceName, &subscription.Price,
+			&subscription.UserID, &subscription.StartDate, &subscription.EndDate)
+		if err != nil {
+			return nil, fmt.Errorf("%w: %w", pgerrors.ErrQueryExec, err)
+		}
+		subs = append(subs, &subscription)
+	}
+	if rows.Err() != nil {
+		return nil, fmt.Errorf("%w: %w", pgerrors.ErrQueryExec, err)
+	}
+
+	return subs, nil
 }
 
 func (r *postgresRepo) GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*models.SubscriptionsTotalCost, error) {
