@@ -45,7 +45,7 @@ func (c *controller) HandleCreateSubscription() http.HandlerFunc {
 		request := dto.CreateSubscriptionRequest{}
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
-
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 
@@ -58,7 +58,8 @@ func (c *controller) HandleCreateSubscription() http.HandlerFunc {
 
 		response, err := c.service.CreateSubscription(r.Context(), modelmap.MapToSubscription(&request))
 		if err != nil {
-
+			code, apierr := resolveError(err, c.logger)
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{apierr.Error()}, code))
 			return
 		}
 
