@@ -137,6 +137,7 @@ func (r *postgresRepo) ListSubscriptions(ctx context.Context, filters *models.Su
 	).From(pgconsts.SubscriptionsTable)
 
 	query, args, err := applySubscriptionsListFilters(queryCore, filters).
+		OrderBy(pgconsts.SubscriptionsStartDate).
 		PlaceholderFormat(sq.Dollar).ToSql()
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", pgerrors.ErrQueryBuilding, err)
