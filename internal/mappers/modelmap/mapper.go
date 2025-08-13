@@ -57,9 +57,14 @@ func MapDeleteSubscriptionToSubscriptionID(request *dto.DeleteSubscriptionReques
 	}
 }
 
+func MapUpdateSubscriptionToSubscriptionID(request *dto.UpdateSubscriptionRequest) *models.SubscriptionID {
+	return &models.SubscriptionID{
+		SubID: *mustParseUUID(&request.SubID),
+	}
+}
+
 func MapToSubscriptionPatch(request *dto.UpdateSubscriptionRequest) *models.SubscriptionPatch {
 	return &models.SubscriptionPatch{
-		SubID:   *mustParseUUID(&request.SubID),
 		Price:   request.Price,
 		EndDate: mustParseTime(request.EndDate),
 	}

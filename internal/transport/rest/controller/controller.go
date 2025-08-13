@@ -98,7 +98,7 @@ func (c *controller) HandleUpdateSubscription() http.HandlerFunc {
 
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
-
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 
@@ -109,9 +109,13 @@ func (c *controller) HandleUpdateSubscription() http.HandlerFunc {
 			return
 		}
 
-		err = c.service.UpdateSubscription(r.Context(), modelmap.MapToSubscriptionPatch(&request))
+		err = c.service.UpdateSubscription(r.Context(),
+			modelmap.MapUpdateSubscriptionToSubscriptionID(&request),
+			modelmap.MapToSubscriptionPatch(&request),
+		)
 		if err != nil {
-
+			code, apierr := resolveError(err, c.logger)
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{apierr.Error()}, code))
 			return
 		}
 

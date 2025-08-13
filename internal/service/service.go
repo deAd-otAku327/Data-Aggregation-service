@@ -13,7 +13,7 @@ import (
 type Service interface {
 	CreateSubscription(ctx context.Context, sub *models.Subscription) (*dto.SubscriptionIDResponse, error)
 	GetSubscription(ctx context.Context, subID *models.SubscriptionID) (*dto.SubscriptionResponse, error)
-	UpdateSubscription(ctx context.Context, patch *models.SubscriptionPatch) error
+	UpdateSubscription(ctx context.Context, subID *models.SubscriptionID, patch *models.SubscriptionPatch) error
 	DeleteSubsription(ctx context.Context, subID *models.SubscriptionID) error
 	ListSubscriptions(ctx context.Context, filters *models.SubscriptionFilters) (*dto.SubscriptionListResponse, error)
 	GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*dto.TotalCostResponse, error)
@@ -53,15 +53,20 @@ func (s *service) GetSubscription(ctx context.Context, subID *models.Subscriptio
 	return nil, nil
 }
 
-func (s *service) UpdateSubscription(ctx context.Context, patch *models.SubscriptionPatch) error {
-	return nil
-}
-
-func (s *service) DeleteSubsription(ctx context.Context, subID *models.SubscriptionID) error {
-	err := s.repo.DeleteSubsription(ctx, subID)
+func (s *service) UpdateSubscription(ctx context.Context, subscriptionID *models.SubscriptionID, patch *models.SubscriptionPatch) error {
+	err := s.repo.UpdateSubscription(ctx, subscriptionID, patch)
 	if err != nil {
 		return wrapError(err)
 	}
+	return nil
+}
+
+func (s *service) DeleteSubsription(ctx context.Context, subscriptionID *models.SubscriptionID) error {
+	err := s.repo.DeleteSubsription(ctx, subscriptionID)
+	if err != nil {
+		return wrapError(err)
+	}
+
 	return nil
 }
 

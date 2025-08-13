@@ -13,7 +13,7 @@ func resolveError(err error, logger *slog.Logger) (int, error) {
 			apierr := apperr.GetAPIErr()
 
 			switch apierr {
-			case service.ErrSubscriptionActivePeriodInvalid:
+			case service.ErrSubscriptionActivePeriodInvalid, service.ErrSubscriptionEndDateInvalid:
 				return http.StatusBadRequest, apierr
 			case service.ErrSubscriptionNotFound:
 				return http.StatusNotFound, apierr

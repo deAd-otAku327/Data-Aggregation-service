@@ -20,7 +20,6 @@ type SubscriptionID struct {
 }
 
 type SubscriptionPatch struct {
-	SubID   uuid.UUID
 	Price   *int
 	EndDate *time.Time
 }

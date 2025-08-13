@@ -10,7 +10,11 @@ var (
 	ErrQueryExec     = errors.New("sql query execution failed")
 
 	ErrsExclusionViolation = map[string]error{
-		pgconsts.ConstraintExclusionNoOverlappingSubs: errors.New("no overlapping subscriptions exclusion violated"),
+		pgconsts.ConstraintExclusionNoOverlappingSubs: errors.New("no_overlapping_subscriptions exclusion violated"),
+	}
+
+	ErrsCheckViolation = map[string]error{
+		pgconsts.ConstraintCheckEndDateAfterStartDate: errors.New("end_date_after_start_date check violated"),
 	}
 
 	ErrNoSubscription = errors.New("no subscription with provided id")
