@@ -22,9 +22,6 @@ func toNullableTime(t *time.Time) *sql.NullTime {
 func catchPQErrors(err error) error {
 	if pqErr, ok := err.(*pq.Error); ok {
 		switch pqErr.Code.Name() {
-		case pgconsts.ErrCheckConstraintViolation:
-			return pgerrors.ErrsCheckViolation[pqErr.Constraint]
-
 		case pgconsts.ErrExclusionConstraintViolation:
 			return pgerrors.ErrsExclusionViolation[pqErr.Constraint]
 		}

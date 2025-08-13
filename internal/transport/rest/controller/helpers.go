@@ -13,9 +13,6 @@ func resolveError(err error, logger *slog.Logger) (int, error) {
 			apierr := apperr.GetAPIErr()
 
 			switch apierr {
-			case service.ErrInvalidPrice, service.ErrInvalidEndDate:
-				logger.Warn("invalid value detected on repository layer: " + apierr.Error())
-				return http.StatusBadRequest, apierr
 			case service.ErrSubscriptionActivePeriodInvalid:
 				return http.StatusBadRequest, apierr
 			}
