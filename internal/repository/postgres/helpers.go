@@ -23,9 +23,7 @@ func catchPQErrors(err error) error {
 	return err
 }
 
-func applyPatchingValues(patch *models.SubscriptionPatch) sq.UpdateBuilder {
-	query := sq.Update(pgconsts.SubscriptionsTable)
-
+func applySubscriptionUpdateValues(query sq.UpdateBuilder, patch *models.SubscriptionPatch) sq.UpdateBuilder {
 	if patch.Price != nil {
 		query = query.Set(pgconsts.SubscriptionsPrice, patch.Price)
 	}

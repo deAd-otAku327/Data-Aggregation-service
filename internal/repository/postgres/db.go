@@ -79,7 +79,9 @@ func (r *postgresRepo) GetSubscription(ctx context.Context, subscriptionID *mode
 }
 
 func (r *postgresRepo) UpdateSubscription(ctx context.Context, subscriptionID *models.SubscriptionID, patch *models.SubscriptionPatch) error {
-	query, args, err := applyPatchingValues(patch).
+	queryCore := sq.Update(pgconsts.SubscriptionsTable)
+
+	query, args, err := applySubscriptionUpdateValues(queryCore, patch).
 		Where(sq.Eq{pgconsts.SubscriptionsPublicID: subscriptionID.SubID}).
 		PlaceholderFormat(sq.Dollar).ToSql()
 	if err != nil {
