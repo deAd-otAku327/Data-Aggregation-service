@@ -46,11 +46,8 @@ func (s *service) GetSubscription(ctx context.Context, subID *models.Subscriptio
 		return nil, wrapError(err)
 	}
 
-	if subscription != nil {
-		return dtomap.MapToSubscriptionResponse(subscription), nil
-	}
+	return dtomap.MapToSubscriptionResponse(subscription), nil
 
-	return nil, nil
 }
 
 func (s *service) UpdateSubscription(ctx context.Context, subscriptionID *models.SubscriptionID, patch *models.SubscriptionPatch) error {
