@@ -16,8 +16,8 @@ type GetSubscriptionRequest struct {
 
 type UpdateSubscriptionRequest struct {
 	SubID   string  `validate:"required,uuid4"` // FROM PATH.
-	Price   *int    `json:"price" validate:"required_without=EndDate,gte=0"`
-	EndDate *string `json:"end_date" validate:"required_without=Price,datetime=01-2006"`
+	Price   *int    `json:"price" validate:"required_without=EndDate,omitempty,gte=0"`
+	EndDate *string `json:"end_date" validate:"omitempty,datetime=01-2006"`
 }
 
 type DeleteSubscriptionRequest struct {
@@ -25,13 +25,13 @@ type DeleteSubscriptionRequest struct {
 }
 
 type ListSubscriptionsRequest struct {
-	UserID      *string `schema:"user_id" validate:"required_without=ServiceName,uuid4"`
-	ServiceName *string `schema:"service_name" validate:"required_without=UserID"`
+	UserID      *string `schema:"user_id" validate:"required_without=ServiceName,omitempty,uuid4"`
+	ServiceName *string `schema:"service_name" validate:"omitempty"`
 }
 
 type GetTotalCostRequest struct {
 	FromDate    string  `schema:"from" validate:"required,datetime=01-2006"`
 	ToDate      string  `schema:"to" validate:"required,datetime=01-2006"`
-	UserID      *string `schema:"user_id" validate:"required_without=ServiceName,uuid4"`
-	ServiceName *string `schema:"service_name" validate:"required_without=UserID"`
+	UserID      *string `schema:"user_id" validate:"required_without=ServiceName,omitempty,uuid4"`
+	ServiceName *string `schema:"service_name" validate:"omitempty"`
 }
