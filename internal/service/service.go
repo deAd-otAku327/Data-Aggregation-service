@@ -41,6 +41,14 @@ func (s *service) CreateSubscription(ctx context.Context, sub *models.Subscripti
 }
 
 func (s *service) GetSubscription(ctx context.Context, subID *models.SubscriptionID) (*dto.SubscriptionResponse, error) {
+	subscription, err := s.repo.GetSubscription(ctx, subID)
+	if err != nil {
+		return nil, wrapError(err)
+	}
+
+	if subscription != nil {
+		return dtomap.MapToSubscriptionResponse(subscription), nil
+	}
 	return nil, nil
 }
 

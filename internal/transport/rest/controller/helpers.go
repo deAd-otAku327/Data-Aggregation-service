@@ -15,6 +15,8 @@ func resolveError(err error, logger *slog.Logger) (int, error) {
 			switch apierr {
 			case service.ErrSubscriptionActivePeriodInvalid:
 				return http.StatusBadRequest, apierr
+			case service.ErrSubscriptionNotFound:
+				return http.StatusNotFound, apierr
 			}
 		}
 

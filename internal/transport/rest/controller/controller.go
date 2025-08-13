@@ -24,7 +24,7 @@ type Controller interface {
 	HandleGetSubscriptionsTotalCost() http.HandlerFunc
 }
 
-const URLParamSubID = "id"
+const URLParamSubID = "subId"
 
 type controller struct {
 	service    service.Service
@@ -81,7 +81,8 @@ func (c *controller) HandleGetSubscription() http.HandlerFunc {
 
 		response, err := c.service.GetSubscription(r.Context(), modelmap.MapGetSubscriptionToSubscriptionID(&request))
 		if err != nil {
-
+			code, apierr := resolveError(err, c.logger)
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{apierr.Error()}, code))
 			return
 		}
 

@@ -12,4 +12,6 @@ var (
 	ErrsExclusionViolation = map[string]error{
 		pgconsts.ConstraintExclusionNoOverlappingSubs: errors.New("no overlapping subscriptions exclusion violated"),
 	}
+
+	ErrNoSubscription = errors.New("no subscription with provided id")
 )

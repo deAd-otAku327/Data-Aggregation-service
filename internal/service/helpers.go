@@ -10,7 +10,8 @@ import (
 func wrapError(err error) error {
 	if errors.Is(err, pgerrors.ErrsExclusionViolation[pgconsts.ConstraintExclusionNoOverlappingSubs]) {
 		return apperrors.New(ErrSubscriptionActivePeriodInvalid, err)
+	} else if errors.Is(err, pgerrors.ErrNoSubscription) {
+		return apperrors.New(ErrSubscriptionNotFound, err)
 	}
-
 	return err
 }

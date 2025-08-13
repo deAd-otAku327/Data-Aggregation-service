@@ -9,9 +9,9 @@ import (
 
 type Repository interface {
 	CreateSubscription(ctx context.Context, sub *models.Subscription) (*models.SubscriptionID, error)
-	GetSubscription(ctx context.Context, subID *models.SubscriptionID) (*models.Subscription, error)
+	GetSubscription(ctx context.Context, subscriptionID *models.SubscriptionID) (*models.Subscription, error)
 	UpdateSubscription(ctx context.Context, patch *models.SubscriptionPatch) error
-	DeleteSubsription(ctx context.Context, subID *models.SubscriptionID) error
+	DeleteSubsription(ctx context.Context, subscriptionID *models.SubscriptionID) error
 	ListSubscriptions(ctx context.Context, filters *models.SubscriptionFilters) ([]*models.Subscription, error)
 	GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*models.SubscriptionsTotalCost, error)
 }
