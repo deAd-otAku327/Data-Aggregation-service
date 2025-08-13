@@ -49,6 +49,7 @@ func (s *service) GetSubscription(ctx context.Context, subID *models.Subscriptio
 	if subscription != nil {
 		return dtomap.MapToSubscriptionResponse(subscription), nil
 	}
+
 	return nil, nil
 }
 
@@ -57,6 +58,10 @@ func (s *service) UpdateSubscription(ctx context.Context, patch *models.Subscrip
 }
 
 func (s *service) DeleteSubsription(ctx context.Context, subID *models.SubscriptionID) error {
+	err := s.repo.DeleteSubsription(ctx, subID)
+	if err != nil {
+		return wrapError(err)
+	}
 	return nil
 }
 

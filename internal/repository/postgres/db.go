@@ -82,7 +82,28 @@ func (r *postgresRepo) UpdateSubscription(ctx context.Context, patch *models.Sub
 	return nil
 }
 
-func (r *postgresRepo) DeleteSubsription(ctx context.Context, subID *models.SubscriptionID) error {
+func (r *postgresRepo) DeleteSubsription(ctx context.Context, subscriptionID *models.SubscriptionID) error {
+	query, args, err := sq.Delete(pgconsts.SubscriptionsTable).
+		Where(sq.Eq{pgconsts.SubscriptionsPublicID: subscriptionID.SubID}).
+		PlaceholderFormat(sq.Dollar).ToSql()
+	if err != nil {
+		return fmt.Errorf("%w: %w", pgerrors.ErrQueryBuilding, err)
+	}
+
+	result, err := r.db.ExecContext(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("%w: %w", pgerrors.ErrQueryExec, err)
+	}
+
+	affected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("%w: %w", pgerrors.ErrQueryExec, err)
+	}
+
+	if affected == 0 {
+		return pgerrors.ErrNoSubscription
+	}
+
 	return nil
 }
 

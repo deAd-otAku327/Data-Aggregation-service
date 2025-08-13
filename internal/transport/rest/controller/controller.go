@@ -133,7 +133,8 @@ func (c *controller) HandleDeleteSubscription() http.HandlerFunc {
 
 		err = c.service.DeleteSubsription(r.Context(), modelmap.MapDeleteSubscriptionToSubscriptionID(&request))
 		if err != nil {
-
+			code, apierr := resolveError(err, c.logger)
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{apierr.Error()}, code))
 			return
 		}
 
