@@ -2,6 +2,8 @@ package apperrors
 
 import "errors"
 
+var ErrNoErr = errors.New("no error found")
+
 type AppError struct {
 	apierr error
 	svcerr error
@@ -19,9 +21,15 @@ func (se AppError) Error() string {
 }
 
 func (se AppError) GetAPIErr() error {
-	return se.apierr
+	if se.apierr != nil {
+		return se.apierr
+	}
+	return ErrNoErr
 }
 
 func (se AppError) GetSvcErr() error {
-	return se.svcerr
+	if se.svcerr != nil {
+		return se.svcerr
+	}
+	return ErrNoErr
 }
