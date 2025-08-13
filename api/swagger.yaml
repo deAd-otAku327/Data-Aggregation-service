@@ -39,7 +39,7 @@ components:
           items:
             type: string
       required: [code, messages]
-## On parameters: required may be error "value is not accepted" related to YAML vscode extension
+## With OpenAPI extension on parameters: "required" may be error "value is not accepted" related to YAML vscode extension
 ## Fix: https://github.com/42Crunch/vscode-openapi/issues/329
 paths:
   /api/subscriptions:
