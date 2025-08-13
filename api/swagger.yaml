@@ -134,8 +134,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Subscription'
-        '400':
-          description: Неверный запрос
+        '404':
+          description: Подписка не найдена
           content:
             application/json:
               schema:
@@ -172,7 +172,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'        
+                $ref: '#/components/schemas/Error'  
+        '404':
+          description: Подписка не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'       
 
     delete:
       summary: Удаление подписки с предоставленным subId
@@ -186,8 +192,8 @@ paths:
       responses:
         '204':
           description: Подписка удалена
-        '400':
-          description: Неверный запрос
+        '404':
+          description: Подписка не найдена
           content:
             application/json:
               schema:
