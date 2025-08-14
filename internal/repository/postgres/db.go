@@ -172,7 +172,7 @@ func (r *postgresRepo) GetSubscriptionsTotalCost(ctx context.Context, filters *m
 	ageFunc := fmt.Sprintf("AGE(LEAST(%s, $1), GREATEST(%s, $2))",
 		pgconsts.SubscriptionsEndDate, pgconsts.SubscriptionsStartDate,
 	)
-	sumFunc := fmt.Sprintf("SUM(%s * (EXTRACT(YEAR FROM %s) * 12 + EXTRACT(MONTH FROM %s))) as total_cost",
+	sumFunc := fmt.Sprintf("COALESCE(SUM(%s * (EXTRACT(YEAR FROM %s) * 12 + EXTRACT(MONTH FROM %s))), 0) as total_cost",
 		pgconsts.SubscriptionsPrice, ageFunc, ageFunc,
 	)
 
