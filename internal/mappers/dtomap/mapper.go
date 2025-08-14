@@ -1,17 +1,17 @@
 package dtomap
 
 import (
+	"data-aggregation-service/internal/types/domain"
 	"data-aggregation-service/internal/types/dto"
-	"data-aggregation-service/internal/types/models"
 )
 
-func MapToSubscriptionIDResponse(model *models.SubscriptionID) *dto.SubscriptionIDResponse {
+func MapToSubscriptionIDResponse(model *domain.SubscriptionID) *dto.SubscriptionIDResponse {
 	return &dto.SubscriptionIDResponse{
 		SubID: model.SubID.String(),
 	}
 }
 
-func MapToSubscriptionResponse(model *models.Subscription) *dto.SubscriptionResponse {
+func MapToSubscriptionResponse(model *domain.Subscription) *dto.SubscriptionResponse {
 	return &dto.SubscriptionResponse{
 		ID:          model.ID.String(),
 		ServiceName: model.ServiceName,
@@ -28,7 +28,7 @@ func MapToSubscriptionResponse(model *models.Subscription) *dto.SubscriptionResp
 	}
 }
 
-func MapToSubscriptionListResponse(models []*models.Subscription) *dto.SubscriptionListResponse {
+func MapToSubscriptionListResponse(models []*domain.Subscription) *dto.SubscriptionListResponse {
 	response := dto.SubscriptionListResponse{}
 	for _, sub := range models {
 		response.Subs = append(response.Subs, MapToSubscriptionResponse(sub))
@@ -36,7 +36,7 @@ func MapToSubscriptionListResponse(models []*models.Subscription) *dto.Subscript
 	return &response
 }
 
-func MapToTotalCostResponse(model *models.SubscriptionsTotalCost) *dto.TotalCostResponse {
+func MapToTotalCostResponse(model *domain.SubscriptionsTotalCost) *dto.TotalCostResponse {
 	return &dto.TotalCostResponse{
 		TotalCost: model.TotalCost,
 	}

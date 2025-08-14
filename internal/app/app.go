@@ -24,8 +24,8 @@ func New(cfg *config.Config) (*App, error) {
 		return nil, err
 	}
 
-	repo := repository.New(cfg.PostgresDB)
-	service := service.New(repo.Postgres)
+	subsRepo := repository.NewSubsRepository(cfg.SubsRepo)
+	service := service.New(subsRepo)
 	controller := controller.New(service, validation.New(), logger)
 
 	return &App{

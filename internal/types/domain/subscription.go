@@ -1,10 +1,20 @@
-package models
+package domain
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+type SubscriptionsRepository interface {
+	Insert(ctx context.Context, sub *Subscription) (*SubscriptionID, error)
+	SelectByID(ctx context.Context, subID *SubscriptionID) (*Subscription, error)
+	Update(ctx context.Context, subID *SubscriptionID, patch *SubscriptionPatch) error
+	Delete(ctx context.Context, subID *SubscriptionID) error
+	SelectList(ctx context.Context, filters *SubscriptionFilters) ([]*Subscription, error)
+	SelectTotalCost(ctx context.Context, filters *SubscriptionsTotalCostFilters) (*SubscriptionsTotalCost, error)
+}
 
 type Subscription struct {
 	ID          uuid.UUID

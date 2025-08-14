@@ -3,8 +3,8 @@ package config
 import "github.com/ilyakaznacheev/cleanenv"
 
 type Config struct {
-	Server     `yaml:"server"`
-	PostgresDB `yaml:"postgres-db"`
+	Server   `yaml:"server"`
+	SubsRepo `yaml:"subscriptions-repo"`
 }
 
 type Server struct {
@@ -13,7 +13,7 @@ type Server struct {
 	LogLevel string `yaml:"log_level" env-default:"info"`
 }
 
-type PostgresDB struct {
+type SubsRepo struct {
 	DriverName    string `yaml:"driver"`
 	URI           string `yaml:"db_uri" env:"DB_URI"`
 	MaxOpenConns  int    `yaml:"max_open_conns" env-default:"15"`

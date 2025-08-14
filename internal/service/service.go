@@ -3,36 +3,35 @@ package service
 import (
 	"context"
 	"data-aggregation-service/internal/mappers/dtomap"
-	"data-aggregation-service/internal/repository"
+	"data-aggregation-service/internal/types/domain"
 	"data-aggregation-service/internal/types/dto"
-	"data-aggregation-service/internal/types/models"
 
 	"github.com/google/uuid"
 )
 
 type Service interface {
-	CreateSubscription(ctx context.Context, sub *models.Subscription) (*dto.SubscriptionIDResponse, error)
-	GetSubscription(ctx context.Context, subID *models.SubscriptionID) (*dto.SubscriptionResponse, error)
-	UpdateSubscription(ctx context.Context, subID *models.SubscriptionID, patch *models.SubscriptionPatch) error
-	DeleteSubsription(ctx context.Context, subID *models.SubscriptionID) error
-	ListSubscriptions(ctx context.Context, filters *models.SubscriptionFilters) (*dto.SubscriptionListResponse, error)
-	GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*dto.TotalCostResponse, error)
+	CreateSubscription(ctx context.Context, sub *domain.Subscription) (*dto.SubscriptionIDResponse, error)
+	GetSubscription(ctx context.Context, subID *domain.SubscriptionID) (*dto.SubscriptionResponse, error)
+	UpdateSubscription(ctx context.Context, subID *domain.SubscriptionID, patch *domain.SubscriptionPatch) error
+	DeleteSubsription(ctx context.Context, subID *domain.SubscriptionID) error
+	ListSubscriptions(ctx context.Context, filters *domain.SubscriptionFilters) (*dto.SubscriptionListResponse, error)
+	GetSubscriptionsTotalCost(ctx context.Context, filters *domain.SubscriptionsTotalCostFilters) (*dto.TotalCostResponse, error)
 }
 
 type service struct {
-	repo repository.Repository
+	repo domain.SubscriptionsRepository
 }
 
-func New(r repository.Repository) Service {
+func New(r domain.SubscriptionsRepository) Service {
 	return &service{
 		repo: r,
 	}
 }
 
-func (s *service) CreateSubscription(ctx context.Context, sub *models.Subscription) (*dto.SubscriptionIDResponse, error) {
+func (s *service) CreateSubscription(ctx context.Context, sub *domain.Subscription) (*dto.SubscriptionIDResponse, error) {
 	sub.ID = uuid.New()
 
-	subscriptionID, err := s.repo.CreateSubscription(ctx, sub)
+	subscriptionID, err := s.repo.Insert(ctx, sub)
 	if err != nil {
 		return nil, wrapError(err)
 	}
@@ -40,8 +39,8 @@ func (s *service) CreateSubscription(ctx context.Context, sub *models.Subscripti
 	return dtomap.MapToSubscriptionIDResponse(subscriptionID), nil
 }
 
-func (s *service) GetSubscription(ctx context.Context, subID *models.SubscriptionID) (*dto.SubscriptionResponse, error) {
-	subscription, err := s.repo.GetSubscription(ctx, subID)
+func (s *service) GetSubscription(ctx context.Context, subID *domain.SubscriptionID) (*dto.SubscriptionResponse, error) {
+	subscription, err := s.repo.SelectByID(ctx, subID)
 	if err != nil {
 		return nil, wrapError(err)
 	}
@@ -50,16 +49,16 @@ func (s *service) GetSubscription(ctx context.Context, subID *models.Subscriptio
 
 }
 
-func (s *service) UpdateSubscription(ctx context.Context, subscriptionID *models.SubscriptionID, patch *models.SubscriptionPatch) error {
-	err := s.repo.UpdateSubscription(ctx, subscriptionID, patch)
+func (s *service) UpdateSubscription(ctx context.Context, subscriptionID *domain.SubscriptionID, patch *domain.SubscriptionPatch) error {
+	err := s.repo.Update(ctx, subscriptionID, patch)
 	if err != nil {
 		return wrapError(err)
 	}
 	return nil
 }
 
-func (s *service) DeleteSubsription(ctx context.Context, subscriptionID *models.SubscriptionID) error {
-	err := s.repo.DeleteSubsription(ctx, subscriptionID)
+func (s *service) DeleteSubsription(ctx context.Context, subscriptionID *domain.SubscriptionID) error {
+	err := s.repo.Delete(ctx, subscriptionID)
 	if err != nil {
 		return wrapError(err)
 	}
@@ -67,8 +66,8 @@ func (s *service) DeleteSubsription(ctx context.Context, subscriptionID *models.
 	return nil
 }
 
-func (s *service) ListSubscriptions(ctx context.Context, filters *models.SubscriptionFilters) (*dto.SubscriptionListResponse, error) {
-	subs, err := s.repo.ListSubscriptions(ctx, filters)
+func (s *service) ListSubscriptions(ctx context.Context, filters *domain.SubscriptionFilters) (*dto.SubscriptionListResponse, error) {
+	subs, err := s.repo.SelectList(ctx, filters)
 	if err != nil {
 		return nil, wrapError(err)
 	}
@@ -76,8 +75,8 @@ func (s *service) ListSubscriptions(ctx context.Context, filters *models.Subscri
 	return dtomap.MapToSubscriptionListResponse(subs), nil
 }
 
-func (s *service) GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*dto.TotalCostResponse, error) {
-	totalCost, err := s.repo.GetSubscriptionsTotalCost(ctx, filters)
+func (s *service) GetSubscriptionsTotalCost(ctx context.Context, filters *domain.SubscriptionsTotalCostFilters) (*dto.TotalCostResponse, error) {
+	totalCost, err := s.repo.SelectTotalCost(ctx, filters)
 	if err != nil {
 		return nil, wrapError(err)
 	}
