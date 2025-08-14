@@ -16,6 +16,7 @@ import (
 
 type App struct {
 	Server *http.Server
+	Logger *slog.Logger
 }
 
 func New(cfg *config.Config) (*App, error) {
@@ -26,12 +27,12 @@ func New(cfg *config.Config) (*App, error) {
 
 	subsRepo := repository.NewSubsRepository(cfg.SubsRepo)
 	subsService := service.NewSubsService(subsRepo)
-	controller := controller.NewSubsController(subsService, validation.New(), logger)
+	controller := controller.NewSubsController(subsService, validation.NewValidation(), logger)
 
 	return &App{
 		Server: &http.Server{
 			Addr:    fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port),
-			Handler: initRouting(controller, logger),
+			Handler: NewHTTPRouter(controller, logger),
 		},
 	}, nil
 }

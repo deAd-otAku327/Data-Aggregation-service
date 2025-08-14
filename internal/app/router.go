@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func initRouting(controller domain.SubscriptionController, logger *slog.Logger) *mux.Router {
+func NewHTTPRouter(controller domain.SubscriptionController, logger *slog.Logger) http.Handler {
 	router := mux.NewRouter().PathPrefix("/api/v1").Subrouter()
 	router.Use(middleware.Logging(logger))
 
