@@ -3,10 +3,20 @@ package domain
 import (
 	"context"
 	"data-aggregation-service/internal/types/dto"
+	"net/http"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+type SubscriptionController interface {
+	HandleCreateSubscription() http.HandlerFunc
+	HandleGetSubscription() http.HandlerFunc
+	HandleUpdateSubscription() http.HandlerFunc
+	HandleDeleteSubscription() http.HandlerFunc
+	HandleListSubscriptions() http.HandlerFunc
+	HandleGetSubscriptionsTotalCost() http.HandlerFunc
+}
 
 type SubscriptionService interface {
 	CreateSubscription(ctx context.Context, sub *Subscription) (*dto.SubscriptionIDResponse, error)

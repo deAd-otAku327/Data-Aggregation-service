@@ -26,7 +26,7 @@ func New(cfg *config.Config) (*App, error) {
 
 	subsRepo := repository.NewSubsRepository(cfg.SubsRepo)
 	subsService := service.NewSubsService(subsRepo)
-	controller := controller.New(subsService, validation.New(), logger)
+	controller := controller.NewSubsController(subsService, validation.New(), logger)
 
 	return &App{
 		Server: &http.Server{

@@ -1,4 +1,4 @@
-package controller
+package httperror
 
 import (
 	"data-aggregation-service/internal/service/apierrors"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func resolveError(err error, logger *slog.Logger) (int, error) {
+func ResolveHTTPErrorStatusCode(err error, logger *slog.Logger) (int, error) {
 	if err != nil {
 		if apperr, ok := err.(*apperrors.AppError); ok {
 			apierr := apperr.GetAPIErr()

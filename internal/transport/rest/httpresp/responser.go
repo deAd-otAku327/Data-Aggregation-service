@@ -1,4 +1,4 @@
-package responser
+package httpresp
 
 import (
 	"data-aggregation-service/internal/types/dto"
@@ -11,7 +11,7 @@ const (
 	contentTypeJSON   = "application/json"
 )
 
-func MakeResponseJSON(w http.ResponseWriter, code int, data any) {
+func MakeHTTPResponseJSON(w http.ResponseWriter, code int, data any) {
 	w.Header().Set(contentTypeHeader, contentTypeJSON)
 	w.WriteHeader(code)
 	if data != nil {
@@ -19,6 +19,6 @@ func MakeResponseJSON(w http.ResponseWriter, code int, data any) {
 	}
 }
 
-func MakeErrorResponseJSON(w http.ResponseWriter, err *dto.ErrorResponse) {
-	MakeResponseJSON(w, err.Code, err)
+func MakeHTTPErrorResponseJSON(w http.ResponseWriter, err *dto.ErrorResponse) {
+	MakeHTTPResponseJSON(w, err.Code, err)
 }

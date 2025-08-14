@@ -1,7 +1,7 @@
 package app
 
 import (
-	"data-aggregation-service/internal/transport/rest/controller"
+	"data-aggregation-service/internal/types/domain"
 	"data-aggregation-service/pkg/middleware"
 	"log/slog"
 	"net/http"
@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func initRouting(controller controller.Controller, logger *slog.Logger) *mux.Router {
+func initRouting(controller domain.SubscriptionController, logger *slog.Logger) *mux.Router {
 	router := mux.NewRouter().PathPrefix("/api/v1").Subrouter()
 	router.Use(middleware.Logging(logger))
 
