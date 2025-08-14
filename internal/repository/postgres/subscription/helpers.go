@@ -1,4 +1,4 @@
-package subscriptions
+package subscription
 
 import (
 	"data-aggregation-service/internal/repository/postgres/pgconsts"
