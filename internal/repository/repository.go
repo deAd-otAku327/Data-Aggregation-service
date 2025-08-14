@@ -1,27 +1,11 @@
 package repository
 
 import (
-	"context"
 	"data-aggregation-service/internal/config"
-	"data-aggregation-service/internal/repository/postgres"
-	"data-aggregation-service/internal/types/models"
+	"data-aggregation-service/internal/repository/postgres/subscription"
+	"data-aggregation-service/internal/types/domain"
 )
 
-type Repository interface {
-	CreateSubscription(ctx context.Context, sub *models.Subscription) (*models.SubscriptionID, error)
-	GetSubscription(ctx context.Context, subID *models.SubscriptionID) (*models.Subscription, error)
-	UpdateSubscription(ctx context.Context, subID *models.SubscriptionID, patch *models.SubscriptionPatch) error
-	DeleteSubsription(ctx context.Context, subID *models.SubscriptionID) error
-	ListSubscriptions(ctx context.Context, filters *models.SubscriptionFilters) ([]*models.Subscription, error)
-	GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*models.SubscriptionsTotalCost, error)
-}
-
-type Repositories struct {
-	Postgres Repository
-}
-
-func New(cfg config.PostgresDB) *Repositories {
-	return &Repositories{
-		Postgres: postgres.New(cfg),
-	}
+func NewSubsRepository(cfg config.SubsRepo) domain.SubscriptionRepository {
+	return subscription.New(cfg)
 }

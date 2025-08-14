@@ -1,8 +1,8 @@
 package modelmap
 
 import (
+	"data-aggregation-service/internal/types/domain"
 	"data-aggregation-service/internal/types/dto"
-	"data-aggregation-service/internal/types/models"
 	"log/slog"
 	"time"
 
@@ -35,8 +35,8 @@ func mustParseUUID(val *string) *uuid.UUID {
 	return &uuid
 }
 
-func MapToSubscription(request *dto.CreateSubscriptionRequest) *models.Subscription {
-	return &models.Subscription{
+func MapToSubscription(request *dto.CreateSubscriptionRequest) *domain.Subscription {
+	return &domain.Subscription{
 		ServiceName: request.ServiceName,
 		Price:       request.Price,
 		UserID:      *mustParseUUID(&request.UserID),
@@ -45,43 +45,43 @@ func MapToSubscription(request *dto.CreateSubscriptionRequest) *models.Subscript
 	}
 }
 
-func MapGetSubscriptionToSubscriptionID(request *dto.GetSubscriptionRequest) *models.SubscriptionID {
-	return &models.SubscriptionID{
+func MapGetSubscriptionToSubscriptionID(request *dto.GetSubscriptionRequest) *domain.SubscriptionID {
+	return &domain.SubscriptionID{
 		SubID: *mustParseUUID(&request.SubID),
 	}
 }
 
-func MapDeleteSubscriptionToSubscriptionID(request *dto.DeleteSubscriptionRequest) *models.SubscriptionID {
-	return &models.SubscriptionID{
+func MapDeleteSubscriptionToSubscriptionID(request *dto.DeleteSubscriptionRequest) *domain.SubscriptionID {
+	return &domain.SubscriptionID{
 		SubID: *mustParseUUID(&request.SubID),
 	}
 }
 
-func MapUpdateSubscriptionToSubscriptionID(request *dto.UpdateSubscriptionRequest) *models.SubscriptionID {
-	return &models.SubscriptionID{
+func MapUpdateSubscriptionToSubscriptionID(request *dto.UpdateSubscriptionRequest) *domain.SubscriptionID {
+	return &domain.SubscriptionID{
 		SubID: *mustParseUUID(&request.SubID),
 	}
 }
 
-func MapToSubscriptionPatch(request *dto.UpdateSubscriptionRequest) *models.SubscriptionPatch {
-	return &models.SubscriptionPatch{
+func MapToSubscriptionPatch(request *dto.UpdateSubscriptionRequest) *domain.SubscriptionPatch {
+	return &domain.SubscriptionPatch{
 		Price:   request.Price,
 		EndDate: mustParseTime(request.EndDate),
 	}
 }
 
-func MapToSubscriptionFilterParams(request *dto.ListSubscriptionsRequest) *models.SubscriptionFilters {
-	return &models.SubscriptionFilters{
+func MapToSubscriptionFilterParams(request *dto.ListSubscriptionsRequest) *domain.SubscriptionFilters {
+	return &domain.SubscriptionFilters{
 		UserID:  mustParseUUID(request.UserID),
 		Service: request.ServiceName,
 	}
 }
 
-func MapToSubscriptionsTotalCostFilters(request *dto.GetTotalCostRequest) *models.SubscriptionsTotalCostFilters {
-	return &models.SubscriptionsTotalCostFilters{
+func MapToSubscriptionsTotalCostFilters(request *dto.GetTotalCostRequest) *domain.SubscriptionsTotalCostFilters {
+	return &domain.SubscriptionsTotalCostFilters{
 		FromDate: *mustParseTime(&request.FromDate),
 		ToDate:   *mustParseTime(&request.ToDate),
-		SubFilters: models.SubscriptionFilters{
+		SubFilters: domain.SubscriptionFilters{
 			UserID:  mustParseUUID(request.UserID),
 			Service: request.ServiceName,
 		},

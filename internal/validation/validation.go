@@ -16,7 +16,7 @@ type Validation struct {
 	Translator ut.Translator
 }
 
-func New() *Validation {
+func NewValidation() *Validation {
 	validate := validator.New()
 
 	_ = validate.RegisterValidation("afterdate", func(fl validator.FieldLevel) bool {

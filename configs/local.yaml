@@ -1,6 +1,6 @@
 server:
   log_level: info
 
-postgres-db: 
+subscriptions-repo: 
   driver: postgres
   max_open_conns: 15
