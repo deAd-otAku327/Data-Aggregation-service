@@ -10,6 +10,7 @@ import (
 	"data-aggregation-service/pkg/migrator"
 	"database/sql"
 	"fmt"
+	"log"
 
 	sq "github.com/Masterminds/squirrel"
 )
@@ -167,5 +168,44 @@ func (r *postgresRepo) ListSubscriptions(ctx context.Context, filters *models.Su
 }
 
 func (r *postgresRepo) GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*models.SubscriptionsTotalCost, error) {
-	return nil, nil
+	// $1 - EndDate param, $2 - StartDate param.
+	// Ordering from WHERE statements.
+	ageFunc := fmt.Sprintf("AGE(LEAST(%s, $1), GREATEST(%s, $2))",
+		pgconsts.SubscriptionsEndDate, pgconsts.SubscriptionsStartDate,
+	)
+	sumFunc := fmt.Sprintf("SUM(%s * (EXTRACT(YEAR FROM %s) * 12 + EXTRACT(MONTH FROM %s))) as total_cost",
+		pgconsts.SubscriptionsPrice, ageFunc, ageFunc,
+	)
+
+	queryCore := sq.Select(sumFunc).
+		From(pgconsts.SubscriptionsTable).
+		// Visual expression: (period_start < end_date <= period_end) || (period_start <= start_date < period_end).
+		Where(sq.Or{
+			sq.And{
+				sq.LtOrEq{pgconsts.SubscriptionsEndDate: filters.ToDate},
+				sq.Gt{pgconsts.SubscriptionsEndDate: filters.FromDate},
+			},
+			sq.And{
+				sq.GtOrEq{pgconsts.SubscriptionsStartDate: filters.FromDate},
+				sq.Lt{pgconsts.SubscriptionsStartDate: filters.ToDate},
+			},
+		})
+
+	query, args, err := applySubscriptionsListFilters(queryCore, &filters.SubFilters).
+		PlaceholderFormat(sq.Dollar).ToSql()
+
+	log.Println(query, args)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", pgerrors.ErrQueryBuilding, err)
+	}
+
+	subTotalCost := models.SubscriptionsTotalCost{}
+
+	row := r.db.QueryRowContext(ctx, query, args...)
+	err = row.Scan(&subTotalCost.TotalCost)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", pgerrors.ErrQueryExec, catchPQErrors(err))
+	}
+
+	return &subTotalCost, nil
 }

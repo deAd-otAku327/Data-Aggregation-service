@@ -8,7 +8,6 @@ import (
 	"data-aggregation-service/internal/types/dto"
 	"data-aggregation-service/internal/validation"
 	"encoding/json"
-	"log"
 	"log/slog"
 	"net/http"
 
@@ -73,6 +72,7 @@ func (c *controller) HandleGetSubscription() http.HandlerFunc {
 		request := dto.GetSubscriptionRequest{
 			SubID: mux.Vars(r)[URLParamSubID],
 		}
+
 		err := c.validation.Validator.Struct(&request)
 		if err != nil {
 			msgs := validation.CollectValidationErrors(err, c.validation.Translator)
@@ -151,7 +151,6 @@ func (c *controller) HandleListSubscriptions() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm() // Semicolon and other separators exclude "&"" generate errors.
 		if err != nil {
-			log.Println("1", r.URL.RawQuery)
 			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
@@ -183,16 +182,16 @@ func (c *controller) HandleListSubscriptions() http.HandlerFunc {
 
 func (c *controller) HandleGetSubscriptionsTotalCost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := r.ParseForm()
+		err := r.ParseForm() // Semicolon and other separators exclude "&"" generate errors.
 		if err != nil {
-
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 
 		request := dto.GetTotalCostRequest{}
 		err = schema.NewDecoder().Decode(&request, r.Form)
 		if err != nil {
-
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 
@@ -205,7 +204,8 @@ func (c *controller) HandleGetSubscriptionsTotalCost() http.HandlerFunc {
 
 		response, err := c.service.GetSubscriptionsTotalCost(r.Context(), modelmap.MapToSubscriptionsTotalCostFilters(&request))
 		if err != nil {
-
+			code, apierr := resolveError(err, c.logger)
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{apierr.Error()}, code))
 			return
 		}
 

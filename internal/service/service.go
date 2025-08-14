@@ -77,5 +77,10 @@ func (s *service) ListSubscriptions(ctx context.Context, filters *models.Subscri
 }
 
 func (s *service) GetSubscriptionsTotalCost(ctx context.Context, filters *models.SubscriptionsTotalCostFilters) (*dto.TotalCostResponse, error) {
-	return nil, nil
+	totalCost, err := s.repo.GetSubscriptionsTotalCost(ctx, filters)
+	if err != nil {
+		return nil, wrapError(err)
+	}
+
+	return dtomap.MapToTotalCostResponse(totalCost), nil
 }

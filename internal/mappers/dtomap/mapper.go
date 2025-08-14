@@ -36,9 +36,9 @@ func MapToSubscriptionListResponse(models []*models.Subscription) *dto.Subscript
 	return &response
 }
 
-func MapToTotalCostResponse(totalCost int) *dto.TotalCostResponse {
+func MapToTotalCostResponse(model *models.SubscriptionsTotalCost) *dto.TotalCostResponse {
 	return &dto.TotalCostResponse{
-		TotalCost: totalCost,
+		TotalCost: model.TotalCost,
 	}
 }
 
