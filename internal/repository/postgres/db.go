@@ -10,7 +10,6 @@ import (
 	"data-aggregation-service/pkg/migrator"
 	"database/sql"
 	"fmt"
-	"log"
 
 	sq "github.com/Masterminds/squirrel"
 )
@@ -194,7 +193,6 @@ func (r *postgresRepo) GetSubscriptionsTotalCost(ctx context.Context, filters *m
 	query, args, err := applySubscriptionsListFilters(queryCore, &filters.SubFilters).
 		PlaceholderFormat(sq.Dollar).ToSql()
 
-	log.Println(query, args)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", pgerrors.ErrQueryBuilding, err)
 	}
