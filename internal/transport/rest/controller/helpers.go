@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"data-aggregation-service/internal/service"
+	"data-aggregation-service/internal/service/apierrors"
 	"data-aggregation-service/pkg/apperrors"
 	"log/slog"
 	"net/http"
@@ -13,17 +13,17 @@ func resolveError(err error, logger *slog.Logger) (int, error) {
 			apierr := apperr.GetAPIErr()
 
 			switch apierr {
-			case service.ErrSubscriptionActivePeriodInvalid, service.ErrSubscriptionEndDateInvalid:
+			case apierrors.ErrSubscriptionActivePeriodInvalid, apierrors.ErrSubscriptionEndDateInvalid:
 				return http.StatusBadRequest, apierr
-			case service.ErrSubscriptionNotFound:
+			case apierrors.ErrSubscriptionNotFound:
 				return http.StatusNotFound, apierr
 			}
 		}
 
 		logger.Error(err.Error())
-		return http.StatusInternalServerError, ErrSomethingWentWrong
+		return http.StatusInternalServerError, apierrors.ErrSomethingWentWrong
 	}
 
 	logger.Error("unable to resolve nil error")
-	return http.StatusInternalServerError, ErrSomethingWentWrong
+	return http.StatusInternalServerError, apierrors.ErrSomethingWentWrong
 }

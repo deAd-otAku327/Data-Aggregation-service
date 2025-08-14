@@ -6,6 +6,6 @@ import (
 	"data-aggregation-service/internal/types/domain"
 )
 
-func NewSubsRepository(cfg config.SubsRepo) domain.SubscriptionsRepository {
+func NewSubsRepository(cfg config.SubsRepo) domain.SubscriptionRepository {
 	return subscription.New(cfg)
 }

@@ -2,12 +2,22 @@ package domain
 
 import (
 	"context"
+	"data-aggregation-service/internal/types/dto"
 	"time"
 
 	"github.com/google/uuid"
 )
 
-type SubscriptionsRepository interface {
+type SubscriptionService interface {
+	CreateSubscription(ctx context.Context, sub *Subscription) (*dto.SubscriptionIDResponse, error)
+	GetSubscription(ctx context.Context, subID *SubscriptionID) (*dto.SubscriptionResponse, error)
+	UpdateSubscription(ctx context.Context, subID *SubscriptionID, patch *SubscriptionPatch) error
+	DeleteSubsription(ctx context.Context, subID *SubscriptionID) error
+	ListSubscriptions(ctx context.Context, filters *SubscriptionFilters) (*dto.SubscriptionListResponse, error)
+	GetSubscriptionsTotalCost(ctx context.Context, filters *SubscriptionsTotalCostFilters) (*dto.TotalCostResponse, error)
+}
+
+type SubscriptionRepository interface {
 	Insert(ctx context.Context, sub *Subscription) (*SubscriptionID, error)
 	SelectByID(ctx context.Context, subID *SubscriptionID) (*Subscription, error)
 	Update(ctx context.Context, subID *SubscriptionID, patch *SubscriptionPatch) error

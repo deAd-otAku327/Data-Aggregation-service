@@ -3,8 +3,9 @@ package controller
 import (
 	"data-aggregation-service/internal/mappers/dtomap"
 	"data-aggregation-service/internal/mappers/modelmap"
-	"data-aggregation-service/internal/service"
+	"data-aggregation-service/internal/service/apierrors"
 	"data-aggregation-service/internal/transport/rest/responser"
+	"data-aggregation-service/internal/types/domain"
 	"data-aggregation-service/internal/types/dto"
 	"data-aggregation-service/internal/validation"
 	"encoding/json"
@@ -27,12 +28,12 @@ type Controller interface {
 const URLParamSubID = "subId"
 
 type controller struct {
-	service    service.Service
+	service    domain.SubscriptionService
 	validation *validation.Validation
 	logger     *slog.Logger
 }
 
-func New(s service.Service, v *validation.Validation, l *slog.Logger) Controller {
+func New(s domain.SubscriptionService, v *validation.Validation, l *slog.Logger) Controller {
 	return &controller{
 		service:    s,
 		validation: v,
@@ -45,7 +46,8 @@ func (c *controller) HandleCreateSubscription() http.HandlerFunc {
 		request := dto.CreateSubscriptionRequest{}
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
-			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse(
+				[]string{apierrors.ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 
@@ -99,7 +101,8 @@ func (c *controller) HandleUpdateSubscription() http.HandlerFunc {
 
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
-			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse(
+				[]string{apierrors.ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 
@@ -151,14 +154,15 @@ func (c *controller) HandleListSubscriptions() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm() // Semicolon and other separators exclude "&"" generate errors.
 		if err != nil {
-			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse(
+				[]string{apierrors.ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 
 		request := dto.ListSubscriptionsRequest{}
 		err = schema.NewDecoder().Decode(&request, r.Form)
 		if err != nil {
-			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{apierrors.ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 
@@ -184,14 +188,16 @@ func (c *controller) HandleGetSubscriptionsTotalCost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm() // Semicolon and other separators exclude "&"" generate errors.
 		if err != nil {
-			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse(
+				[]string{apierrors.ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 
 		request := dto.GetTotalCostRequest{}
 		err = schema.NewDecoder().Decode(&request, r.Form)
 		if err != nil {
-			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse([]string{ErrParsingRequest.Error()}, http.StatusBadRequest))
+			responser.MakeErrorResponseJSON(w, dtomap.MapToErrorResponse(
+				[]string{apierrors.ErrParsingRequest.Error()}, http.StatusBadRequest))
 			return
 		}
 

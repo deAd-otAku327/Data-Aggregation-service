@@ -1,4 +1,4 @@
-package service
+package apierrors
 
 import (
 	"data-aggregation-service/internal/repository/postgres/pgconsts"
@@ -7,7 +7,16 @@ import (
 	"errors"
 )
 
-func wrapError(err error) error {
+var (
+	ErrParsingRequest     = errors.New("invalid request")
+	ErrSomethingWentWrong = errors.New("sorry, something went wrong")
+
+	ErrSubscriptionActivePeriodInvalid = errors.New("there is the same subscription with active period overlapping")
+	ErrSubscriptionEndDateInvalid      = errors.New("end date invalid, value must be after start date")
+	ErrSubscriptionNotFound            = errors.New("subscription with provided id not found")
+)
+
+func WrapWithApiError(err error) error {
 	if errors.Is(err, pgerrors.ErrsExclusionViolation[pgconsts.ConstraintExclusionNoOverlappingSubs]) {
 		return apperrors.New(ErrSubscriptionActivePeriodInvalid, err)
 	} else if errors.Is(err, pgerrors.ErrsCheckViolation[pgconsts.ConstraintCheckEndDateAfterStartDate]) {
