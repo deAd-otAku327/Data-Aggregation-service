@@ -3,7 +3,7 @@ info:
   title: Data-Aggregation-service API
   version: '1.0'
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8080/api/v1
 
 components:
   schemas:
@@ -42,7 +42,7 @@ components:
 ## With OpenAPI extension on parameters: "required" may be error "value is not accepted" related to YAML vscode extension
 ## Fix: https://github.com/42Crunch/vscode-openapi/issues/329
 paths:
-  /api/subscriptions:
+  /subscriptions:
     post:
       summary: Создание подписки
       requestBody:
@@ -117,7 +117,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
   
-  /api/subscriptions/{subId}:
+  /subscriptions/{subId}:
     get:
       summary: Получение подписки с предоставленным subId
       parameters:
@@ -199,7 +199,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error' 
 
-  /api/subscriptions/cost/total:
+  /subscriptions/cost/total:
     get:
       summary: Получение суммарной стоимости подписок за период с фильтрацией по uuid пользователя и сервису (хотя бы 1 фильтр обязателен)
       parameters:

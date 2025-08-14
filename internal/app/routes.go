@@ -10,7 +10,7 @@ import (
 )
 
 func initRouting(controller controller.Controller, logger *slog.Logger) *mux.Router {
-	router := mux.NewRouter().PathPrefix("/api").Subrouter()
+	router := mux.NewRouter().PathPrefix("/api/v1").Subrouter()
 	router.Use(middleware.Logging(logger))
 
 	router.HandleFunc("/subscriptions", controller.HandleCreateSubscription()).Methods(http.MethodPost)
