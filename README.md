@@ -35,11 +35,11 @@ curl -X POST "http://localhost:8080/api/v1/subscriptions" \
 ```json
 curl -X GET "http://localhost:8080/api/v1/subscriptions?user_id=eb8a32db-139f-4e33-b172-39810efcc487&service_name=Yandex+Plus"
 ```
-### 3. GET /api/subscriptions/{subId} (получение конкретной подписки по subId)
+### 3. GET /subscriptions/{subId} (получение конкретной подписки по subId)
 ```json
 curl -X GET "http://localhost:8080/api/v1/subscriptions/248d128a-91a6-454e-b01f-c85ee5ca0471"
 ```
-### 4. PATCH subscriptions/{subId} (частичное обновление подписки по subId)
+### 4. PATCH /subscriptions/{subId} (частичное обновление подписки по subId)
 > [!NOTE]
 > Поддерживается обновление цены и/или даты окончания подписки.
 ```json
@@ -50,7 +50,7 @@ curl -X PATCH "http://localhost:8080/api/v1/subscriptions/248d128a-91a6-454e-b01
     "end_date": "04-2025"
   }'
 ```
-### 5. DELETE /api/subscriptions/{subId} (удаление подписки по subId)
+### 5. DELETE /subscriptions/{subId} (удаление подписки по subId)
 ```json
 curl -X DELETE "http://localhost:8080/api/v1/subscriptions/248d128a-91a6-454e-b01f-c85ee5ca0471"
 ```
